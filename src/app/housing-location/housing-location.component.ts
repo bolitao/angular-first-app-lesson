@@ -9,16 +9,16 @@ import { HousingLocation } from '../housinglocation';
   template: `<section class="listing">
     <img
       class="listing-photo"
-      [src]="housingLocation.photo"
-      alt="Exterior photo of {{ housingLocation.name }}"
+      [src]="info.photo"
+      alt="Exterior photo of {{ info.name }}"
     />
-    <h2 class="listing-heading">{{ housingLocation.name }}</h2>
+    <h2 class="listing-heading">{{ info.name }}</h2>
     <p class="listing-location">
-      {{ housingLocation.city }}, {{ housingLocation.state }}
+      {{ info.city }}, {{ info.state }}
     </p>
   </section>`,
   styleUrls: ['./housing-location.component.css'],
 })
 export class HousingLocationComponent {
-  @Input() housingLocation!: HousingLocation;
+  @Input() info!: HousingLocation;
 }
