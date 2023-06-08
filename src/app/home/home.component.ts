@@ -1,22 +1,25 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HousingLocationComponent } from '../housing-location/housing-location.component';
-import { HousingLocation } from '../housinglocation';
-import { HousingService } from '../housing.service';
+import {Component, inject} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {HousingLocationComponent} from '../housing-location/housing-location.component';
+import {HousingLocation} from '../housinglocation';
+import {HousingService} from '../housing.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, HousingLocationComponent],
-  template: `<section>
+  template: `
+    <section>
       <form>
-        <input type="text" placeholder="Filter by city" />
-        <button class="primary" type="button">Search</button>
+        <input type="text" placeholder="Filter by city" #filter/>
+        <button class="primary" type="button"
+                (click)="filterResults(filter.value)">Search
+        </button>
       </form>
     </section>
     <section class="results">
       <app-housing-location
-        *ngFor="let h of housingLocationList"
+        *ngFor="let h of filteredLocationList"
         [info]="h"
       ></app-housing-location>
     </section>`,
@@ -25,8 +28,18 @@ import { HousingService } from '../housing.service';
 export class HomeComponent {
   housingLocationList: HousingLocation[] = [];
   housingService: HousingService = inject(HousingService);
+  filteredLocationList: HousingLocation[] = [];
 
   constructor() {
     this.housingLocationList = this.housingService.getAllHousingLocations();
+    this.filteredLocationList = this.housingLocationList;
+  }
+
+  filterResults(input: string) {
+    if (!input) {
+      this.filteredLocationList = this.housingLocationList;
+    } else {
+      this.filteredLocationList = this.housingLocationList.filter(e => e?.city.toLowerCase().includes(input.toLowerCase()));
+    }
   }
 }
